@@ -1,0 +1,138 @@
+import time
+import streamlit as st
+import numpy as np 
+import pandas as pd 
+
+st.set_page_config(
+    page_title="自定義網頁標題",
+    page_icon="random",
+    # layout="centered",
+    layout = "wide",
+    initial_sidebar_state="collapsed",
+)
+
+
+st.title("Home Page")
+st.title("HHHH")
+st.write("我的第一支程式")
+df = pd.DataFrame({
+    "col1":[11,22,33,0],
+    "col2":[33,22,11,50],
+    "col3":[22,33,44,55],
+    "col4":[12,13,14,15]
+})
+df
+
+
+
+df= pd.DataFrame(
+    np.random.randn(5,2) / [10,10] + [24.721575985021353, 121.72166881292374],
+    columns = ['lat','lon']
+)
+st.map(df)
+df
+
+
+df= pd.DataFrame(
+    np.random.randn(5,2) / [100,100] + [24.721575985021353, 121.72166881292374],
+    columns = ['lat','lon']
+)
+st.map(df)
+df
+
+st.write("FORM小工具")
+if st.checkbox('Show Map'):
+    map_data = pd.DataFrame(
+        np.random.randn(10,2) / [50,50] + [22.7, 120.3],
+        columns=['lat','lon']
+    )
+    st.map(map_data)
+
+test_data = pd.DataFrame(np.random.randn(10,3),columns=['aa','bb','cc'])
+test_data
+
+# option = st.selectbox(
+#     '你喜歡哪種動物？',
+#     ['狗', '貓', '鸚鵡', '天竺鼠'])
+# '你的答案：', option
+
+expander = st.expander("點擊來展開...")
+expander.write("如果你要顯示很多文字，但又不想佔大半空間，可以使用這種方式。")
+
+option1 = st.sidebar.selectbox(
+    '你喜歡哪種動物？',
+    ['狗', '貓', '鸚鵡', '天竺鼠'])
+
+left_column, right_column = st.columns(2)
+left_column.write("這是左邊欄位。")
+right_column.write("這是右邊欄位。")
+
+right_column.write('你的答案：' + option1)
+
+@st.cache(suppress_st_warning=True)
+def expensive_computation(a):
+    st.write(f"沒有快取：expensive_computation({a})")
+    time.sleep(2)
+    return a * 2
+
+a = st.slider("選擇一個數字", 0, 10)
+result = expensive_computation(a)
+st.write("結果：", result)
+
+st.sidebar.header('在sidebar添加標題')
+a = st.sidebar.number_input(label = '在sidebar輸入一些數字')
+b = st.sidebar.text_input(label = '在sidebar輸入一些文字', value= '請在此輸入文字')
+a = st.number_input(label = '請輸入數字')
+b = st.number_input(label = '請輸入數字1')
+
+
+st.button('Hit me')
+# st.download_button('On the dl', data)
+st.checkbox('Check me out')
+st.radio('Radio', [1,2,3])
+st.selectbox('Select', [1,2,3])
+st.multiselect('Multiselect', [1,2,3])
+st.slider('Slide me', min_value=0, max_value=10)
+st.select_slider('Slide to select', options=[1,'2'])
+st.text_input('Enter some text')
+st.number_input('Enter a number')
+st.text_area('Area for textual entry')
+st.date_input('Date input')
+st.time_input('Time entry')
+st.file_uploader('File uploader')
+st.camera_input("一二三,茄子!")
+st.color_picker('Pick a color')
+
+
+st.title('相加')
+a = st.number_input(label = '請輸入數字1', step =1, value=0)
+b = st.number_input(label = '請輸入數字2', step =1, value=0)
+# 確定a b 都有值之後 在輸出值
+if a or b:
+  st.write('相加結果')
+  st.write(a+b)
+
+
+
+import plotly.express as px
+import streamlit as st
+df = px.data.iris()
+st.dataframe(df)
+#在網頁上呈現DF
+fig = px.scatter(df, x="sepal_width", y="sepal_length", color="species", size='petal_length', hover_data=['petal_width'])
+#創造一個px scatter chart的物件
+st.plotly_chart(fig)
+#在網頁上呈現plotly chart  
+
+
+import plotly.express as px
+@st.cache()
+def get_data():
+  df = px.data.iris()
+  return df
+#將讀取資料的方式變成function
+#再利用st.cache()將資料放進快取內
+df = get_data()
+st.dataframe(df)
+fig = px.scatter(df, x="sepal_width", y="sepal_length", color="species",size='petal_length', hover_data=['petal_width'])
+st.plotly_chart(fig)
